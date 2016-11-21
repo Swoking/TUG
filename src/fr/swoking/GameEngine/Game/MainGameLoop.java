@@ -6,15 +6,16 @@ import fr.swoking.GameEngine.RenderEngine.DisplayManager;
 import fr.swoking.GameEngine.RenderEngine.Loader;
 import fr.swoking.GameEngine.RenderEngine.RawModel;
 import fr.swoking.GameEngine.RenderEngine.Renderer;
+import fr.swoking.GameEngine.shaders.StaticShader;
 
 public class MainGameLoop {
 
 	public static void main(String[] args) {
 		
 		DisplayManager.createDisplay();
-		
 		Loader loader = new Loader();
 		Renderer renderer = new Renderer();
+		StaticShader shader = new StaticShader();
 		
 		float[] vertices = {
 				// Left bottom triangle
@@ -32,14 +33,15 @@ public class MainGameLoop {
 		RawModel model = loader.loadToVAO(vertices, indices);
 		
 		while(!Display.isCloseRequested()){
-			
-			renderer.prepare();
 			//game logic
+			renderer.prepare();
+			shader.start();
 			renderer.render(model);
+			shader.stop();
 			DisplayManager.updateDisplay();
 			
 		}
-		
+		shader.cleanUp();
 		loader.cleanUP();
 		DisplayManager.closeDisplay();
 	}
