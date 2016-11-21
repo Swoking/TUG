@@ -1,4 +1,4 @@
-package fr.swoking.GameEngine.RenderEngine;
+package fr.swoking.GameEngine.models;
 
 public class RawModel {
 	

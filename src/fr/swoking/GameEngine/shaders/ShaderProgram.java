@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Vector3f;
 
 public abstract class ShaderProgram {
 
@@ -22,6 +23,13 @@ public abstract class ShaderProgram {
 		bindAttributes();
 		GL20.glLinkProgram(programID);
 		GL20.glValidateProgram(programID);
+		getAllUniformLocations();
+	}
+	
+	protected abstract void getAllUniformLocations();
+	
+	protected int getUniformLocation(String uniformName){
+		return GL20.glGetUniformLocation(programID, uniformName);
 	}
 	
 	public void start(){
@@ -45,6 +53,18 @@ public abstract class ShaderProgram {
 	
 	protected void bindAttribute(int attribute, String variableName){
 		GL20.glBindAttribLocation(programID, attribute, variableName);
+	}
+
+	protected void loadFloat(int location, float value){
+		GL20.glUniform1f(location, value);
+	}
+	
+	protected void loadVector(int location, Vector3f vector){
+		GL20.glUniform3f(location, vector.x, vector.y, vector.z);
+	}
+	
+	protected void loadBoolean(int location, boolean value){
+		
 	}
 	
 	private static int loadShader(String file, int type) {

@@ -4,9 +4,11 @@ import org.lwjgl.opengl.Display;
 
 import fr.swoking.GameEngine.RenderEngine.DisplayManager;
 import fr.swoking.GameEngine.RenderEngine.Loader;
-import fr.swoking.GameEngine.RenderEngine.RawModel;
 import fr.swoking.GameEngine.RenderEngine.Renderer;
+import fr.swoking.GameEngine.models.RawModel;
+import fr.swoking.GameEngine.models.TexturedModel;
 import fr.swoking.GameEngine.shaders.StaticShader;
+import fr.swoking.GameEngine.textures.ModelTexture;
 
 public class MainGameLoop {
 
@@ -16,7 +18,7 @@ public class MainGameLoop {
 		Loader loader = new Loader();
 		Renderer renderer = new Renderer();
 		StaticShader shader = new StaticShader();
-		
+
 		float[] vertices = {
 				// Left bottom triangle
 				-0.5f,  0.5f, 0f,
@@ -30,13 +32,23 @@ public class MainGameLoop {
 				3, 1, 2
 		};
 		
-		RawModel model = loader.loadToVAO(vertices, indices);
+		float[] textureCoords = {
+				// Left bottom triangle
+				0,0,
+				0,1,
+				1,1,
+				1,0
+		};
+		
+		RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("test"));
+		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!Display.isCloseRequested()){
 			//game logic
 			renderer.prepare();
 			shader.start();
-			renderer.render(model);
+			renderer.render(texturedModel);
 			shader.stop();
 			DisplayManager.updateDisplay();
 			
